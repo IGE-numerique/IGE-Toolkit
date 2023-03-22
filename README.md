@@ -1,5 +1,5 @@
 # IGE-Toolkit
-We want to give a second life to [MC-Toolkit](https://github.com/mickaellalande/MC-Toolkit), the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz].(mailto:martin.menegoz@univ-grenoble-alpes.fr)
+We want to give a second life to [MC-Toolkit](https://github.com/mickaellalande/MC-Toolkit), the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz](mailto:martin.menegoz@univ-grenoble-alpes.fr).
 
 The goal of this repository is to give support materials for the meetings at [IGE](http://www.ige-grenoble.fr/) about tools and methods dealing with Geoscientific data in additions of a Slack channel.
 
