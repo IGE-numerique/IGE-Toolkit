@@ -3,7 +3,7 @@ We want to give a second life to [MC-Toolkit](https://github.com/mickaellalande/
 
 The goal of this repository is to give support materials for the meetings at [IGE](http://www.ige-grenoble.fr/) about tools and methods dealing with Geoscientific data in additions of a Slack channel.
 
-<font size=2> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
+<font size=1> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
 
 ## Next meetings:
 
