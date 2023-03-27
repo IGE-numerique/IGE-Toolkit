@@ -10,14 +10,16 @@ IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mick
 
 ### Contact
 
- #### submit a proposition 
- You want to submit your proposition, send an email to the mailing list:  [ige-numerique@univ-grenoble-alpes.fr](mailTo:ige-numerique@univ-grenoble-alpes.fr)
+ #### Submit a proposition 
+   You want to submit your proposition, send an email to the mailing list:  [ige-numerique@univ-grenoble-alpes.fr](mailTo:ige-numerique@univ-grenoble-alpes.fr)
 
  #### Mailing list
- - You can [suscribe](https://listes.univ-grenoble-alpes.fr/sympa/subscribe/ige-numerique?previous_action=edit_list_request) or [unsuscribe](https://listes.univ-grenoble-alpes.fr/sympa/signoff/ige-numerique) yourself to the IGE-Toolkit mailing list.
+   You can [suscribe](https://listes.univ-grenoble-alpes.fr/sympa/subscribe/ige-numerique?previous_action=edit_list_request) or [unsuscribe](https://listes.univ-grenoble-alpes.fr/sympa/signoff/ige-numerique) yourself to the IGE-Toolkit mailing list.
 
  #### IGE-Toolkit Animation
- You want to be part of the IGE-Toolkit animation team, send an email to amdin@univ-grenoble-alpes.fr.
+   You want to be part of the IGE-Toolkit animation team, send an email to amdin@univ-grenoble-alpes.fr.
+   
+   ---------------------------------------
 
 <font size=1> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
 
