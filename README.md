@@ -8,18 +8,20 @@ IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mick
 
 [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
 
-## Contact
+### Contact
  - You can submit your proposition on slack and on ige-numerique@univ-grenoble-alpes.fr (for non-slack users)
  -
- ### Contacts the animation team: amdin@univ-grenoble-alpes.fr
+ #### Contacts the animation team: amdin@univ-grenoble-alpes.fr
 
 <font size=1> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
 
-## Next meetings:
+## Next meetings
 
 - Tuesday 6/03/2023 at 11:00 am [MCP 117-118] : Back from Geopython 2023. Jean Baptiste Barré
 
-## Possible next meetings:
+Permanent Zoom link : https://univ-grenoble-alpes-fr.zoom.us/j/92094274796?pwd=UW1mVldveHJ0aTdUaG52UzNXR3VxUT09
+
+## Possible next meetings
 
 - Github Pages ([Mickaël Lalande](https://mickaellalande.github.io/), [Amaury Dehecq](https://adehecq.github.io/), [Takaya Uchida](https://roxyboy.github.io/) ?)
 - How to write science ([Charles Amory](http://www.ige-grenoble.fr/identite_id1776889.html))
@@ -28,7 +30,7 @@ IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mick
 - Web graphic interface (ex: [getopstandop.u-ga.fr/](http://getopstandop.u-ga.fr/)) ([Samuel WEBER](http://pp.ige-grenoble.fr/annuaire/annuaire-osug-ige/webersa.htm))
 - visit / FlowVR ([Basile HECTOR](http://pp.ige-grenoble.fr/annuaire/annuaire-osug-ige/hectorb.htm))
 
-## Past meetings:
+## Past meetings
 - Thursday 4/11 at 10:00 am : Machine learning #3: Physical constraints to machine learning methods [Jordi Bolibar](https://jordibolibar.wordpress.com/) (Material : [Paper](https://arxiv.org/pdf/2001.04385v1.pdf), [Video](https://www.youtube.com/watch?v=SU-OILSmR1M), [Book](https://physicsbaseddeeplearning.org/intro.html))
 - Tuesday 22/06 at 10:30 am: Machine learning #2: Presentation of a ML probleme from scratch ([Clara Burgard](https://claraburgard.weebly.com/))
 - Tuesday 25/05 at 10:30 am: Science outreach and documentation on the cloud - A brief overview of the tools behind OGGM-Edu: holoviz, sphinx, readthedocs, mybinder, repo2docker, jupyterhub ([Fabien Maussion](https://fabienmaussion.info/)) ([slides](https://github.com/mickaellalande/MC-Toolkit/blob/master/slides/OGGM-Edu%20tools.pdf))
@@ -47,7 +49,7 @@ IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mick
 - Tuesday 07/04 at 10:15 am: [Presentation](Presentation) ([Mickaël Lalande](https://mickaellalande.github.io/))
 
 
-## Here are some ideas of topics/tools to talk about:
+## Here are some ideas of topics/tools to talk about
 - xarray (+dask) / cdo / climaf (climatology)  
 - How to compute climatologies (DJF, days in months, etc. what do you do?)
 - cartopy / ferret / basemap / proplot (plot)  
