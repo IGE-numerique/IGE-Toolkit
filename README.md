@@ -1,6 +1,6 @@
 # IGE-Toolkit
 
-The goal of this repository is to give support materials for the meetings at [IGE](http://www.ige-grenoble.fr/) about tools and methods dealing with Geoscientific data in additions of a Slack channel.
+IGE-Toolkit is designed to share with [IGE](http://www.ige-grenoble.fr/)’s researchers and scientists the latest and most efficient techniques and methods for conducting their scientific research. This repository is intended to share presentation materials to complement exchanges on the dedicated [Slack channel](https://ige-toolkit/slack.com).
 
 IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz](mailto:martin.menegoz@univ-grenoble-alpes.fr).
 
