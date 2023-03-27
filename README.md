@@ -8,11 +8,10 @@ IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mick
 
 [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
 
-## Contacts for proposing new topics:
+## Contacts:
  - You can submit your proposition on slack and on ige-numerique@univ-grenoble-alpes.fr (for non-slack users)
  -
- ## Contacts to be part of the animation team:
- - Want to be part of the animation: send a mail to toolkit amdin@univ-grenoble-alpes.fr
+ ### Contacts the animation team: amdin@univ-grenoble-alpes.fr
 
 <font size=1> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
 
