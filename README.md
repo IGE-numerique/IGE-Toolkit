@@ -1,10 +1,11 @@
 # IGE-Toolkit
 
-IGE-Toolkit is designed to share with [IGE](http://www.ige-grenoble.fr/)’s researchers and scientists the latest and most efficient techniques and methods for conducting their scientific research. This repository is intended to share presentation materials to complement exchanges on the dedicated [Slack channel](https://ige-toolkit/slack.com).
+IGE-Toolkit is designed to share with [IGE](http://www.ige-grenoble.fr/)’s researchers, scientists ans engineers the latest and most efficient techniques and methods for conducting their scientific research. it is also also fostering a collaborative and supportive community where individuals can connect and seek help from each other. By promoting knowledges exchange and collaboration, the IGE-Toolkit aims to facilitate ongoing learning in GeoSciences.
+
+This repository is intended to share presentation materials to complement exchanges on the dedicated [Slack channel](https://ige-toolkit/slack.com).
 
 IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz](mailto:martin.menegoz@univ-grenoble-alpes.fr).
 
-:white_check_mark: The objective of the IGE-Toolkit presentation is to present a tool and exchange with others + know who to ask when we need help.
 
 [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
 
@@ -17,7 +18,7 @@ IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mick
    You can [suscribe](https://listes.univ-grenoble-alpes.fr/sympa/subscribe/ige-numerique?previous_action=edit_list_request) or [unsuscribe](https://listes.univ-grenoble-alpes.fr/sympa/signoff/ige-numerique) yourself to the IGE-Toolkit mailing list.
 
  #### IGE-Toolkit Animation
-   If You want to be part of the IGE-Toolkit animation team, send an email to [toolkit-admin@univ-grenoble-alpes.fr](mailTo:toolkit-admin@univ-grenoble-alpes.fr)
+   If You want to be part of the IGE-Toolkit animation team, send an email to [ige-toolkit-admin@univ-grenoble-alpes.fr](mailTo:ige-toolkit-admin@univ-grenoble-alpes.fr)
    
    ---------------------------------------
 
