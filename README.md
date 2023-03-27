@@ -4,7 +4,7 @@
 
 IGE-Toolkit is designed to share with [IGE](https://www.ige-grenoble.fr/?lang=en)’s researchers, scientists ans engineers the latest and most efficient techniques and methods for conducting their scientific research. IGE-Toolkit is also fostering a collaborative and supportive community where individuals can connect and seek help from each other. By promoting knowledges exchange and collaboration, the IGE-Toolkit aims to facilitate ongoing learning in GeoSciences.
 
-This repository is intended to share presentation materials to complement exchanges on the dedicated [Slack channel](https://ige-toolkit/slack.com). [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
+This repository is intended to share presentation materials to complement exchanges on the dedicated [Slack channel](https://ige-toolkit.slack.com). [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
 
 ____________________
 
