@@ -4,7 +4,7 @@ The goal of this repository is to give support materials for the meetings at [IG
 
 IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz](mailto:martin.menegoz@univ-grenoble-alpes.fr).
 
-The goal of the presentation is to present a tool and exchange with others + know who to ask when we need help.
+:white_check_mark: The goal of the presentation is to present a tool and exchange with others + know who to ask when we need help.
 
 [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
 
