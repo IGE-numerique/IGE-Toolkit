@@ -9,18 +9,15 @@ This repository is intended to share presentation materials to complement exchan
 ____________________
 
 ### Contact
-
  #### Submit a proposition 
    If you would like to present the perfect tool or the method that drives you crazy, please send an email to the mailing list: [ige-numerique@univ-grenoble-alpes.fr](mailTo:ige-numerique@univ-grenoble-alpes.fr)
-
  #### Mailing list
    You can [suscribe](https://listes.univ-grenoble-alpes.fr/sympa/subscribe/ige-numerique?previous_action=edit_list_request) or [unsuscribe](https://listes.univ-grenoble-alpes.fr/sympa/signoff/ige-numerique) yourself to the IGE-Toolkit mailing list.
-
  #### IGE-Toolkit Animation
    If You want to be part of the IGE-Toolkit animation team, send an email to [ige-toolkit-admin@univ-grenoble-alpes.fr](mailTo:ige-toolkit-admin@univ-grenoble-alpes.fr)
-   
+____________________
 
-<font size=1em> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
+<font size=0.5em> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
 
 ## Next meetings
 
