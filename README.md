@@ -1,7 +1,16 @@
 # IGE-Toolkit
-We want to give a second life to [MC-Toolkit](https://github.com/mickaellalande/MC-Toolkit), the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz](mailto:martin.menegoz@univ-grenoble-alpes.fr).
 
 The goal of this repository is to give support materials for the meetings at [IGE](http://www.ige-grenoble.fr/) about tools and methods dealing with Geoscientific data in additions of a Slack channel.
+
+IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz](mailto:martin.menegoz@univ-grenoble-alpes.fr).
+
+The goal of the presentation is to present a tool and exchange with others + know who to ask when we need help.
+
+[MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
+
+## Contacts for proposing new topics:
+- mickael.lalande@univ-grenoble-alpes.fr
+- martin.menegoz@univ-grenoble-alpes.fr
 
 <font size=1> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
 
@@ -37,8 +46,6 @@ The goal of this repository is to give support materials for the meetings at [IG
 - Tuesday 07/04 at 10:15 am: [Presentation](Presentation) ([Mickaël Lalande](https://mickaellalande.github.io/))
 
 
-
-
 ## Here are some ideas of topics/tools to talk about:
 - xarray (+dask) / cdo / climaf (climatology)  
 - How to compute climatologies (DJF, days in months, etc. what do you do?)
@@ -54,15 +61,5 @@ The goal of this repository is to give support materials for the meetings at [IG
 - How to get CMIP6 data? (website, CICLAD/CLIMAF)
 - Reanalyses / Observations
 - How to launch MAR / LMDZ / Elmer-ICE / NEMO
-
-
-
-The goal is to present a tool and exchange with others + know who to ask when we need help.
-
-[MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
-
-## Contacts for proposing new topics:
-- mickael.lalande@univ-grenoble-alpes.fr
-- martin.menegoz@univ-grenoble-alpes.fr
 
 PS: you can also make directly a pull request on this file in the *Possible unplanned meetings* section or use directly the Slack #general channel to contact us. We will then add you as a contributor so that you can share some code. It is possible that this repository will be stored somewhere else in the future. If you have any idea of improvement please share it with us! :)
