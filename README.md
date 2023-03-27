@@ -4,13 +4,15 @@ IGE-Toolkit is designed to share with [IGE](http://www.ige-grenoble.fr/)’s res
 
 IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mickaël Lalande](https://mickaellalande.github.io/) (PhD Student 2019 - 2022) and  [Martin Ménégoz](mailto:martin.menegoz@univ-grenoble-alpes.fr).
 
-:white_check_mark: The goal of the presentation is to present a tool and exchange with others + know who to ask when we need help.
+:white_check_mark: The objective of the IGE-Toolkit presentation is to present a tool and exchange with others + know who to ask when we need help.
 
 [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
 
 ## Contacts for proposing new topics:
-- mickael.lalande@univ-grenoble-alpes.fr
-- martin.menegoz@univ-grenoble-alpes.fr
+ - You can submit your proposition on slack and on ige-numerique@univ-grenoble-alpes.fr (for non-slack users)
+ -
+ ## Contacts to be part of the animation team:
+ - Want to be part of the animation: send a mail to toolkit amdin@univ-grenoble-alpes.fr
 
 <font size=1> For easily editing a README: [https://stackedit.io/](https://stackedit.io/) </font>
 
