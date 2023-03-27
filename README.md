@@ -8,7 +8,7 @@ IGE-Toolkit is the continuation of MC-Toolkit, the excellent initiative of [Mick
 
 [MEOM's tutos software](https://github.com/meom-group/tutos/blob/master/software.md) already has a lot a useful informations!
 
-## Contacts:
+## Contact
  - You can submit your proposition on slack and on ige-numerique@univ-grenoble-alpes.fr (for non-slack users)
  -
  ### Contacts the animation team: amdin@univ-grenoble-alpes.fr
