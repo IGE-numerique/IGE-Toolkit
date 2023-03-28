@@ -21,7 +21,7 @@ ____________________
 
 ## Next meetings
 
-- **Tuesday 6/03/2023 at 11:00** am [MCP 117-118] : Back from Geopython 2023. **Jean Baptiste Barré**
+- **Thursday 06/04/2023 at 11:00** am [MCP 117-118] : Back from Geopython 2023. **Jean Baptiste Barré**
 
 Permanent Zoom link : https://univ-grenoble-alpes-fr.zoom.us/j/92094274796?pwd=UW1mVldveHJ0aTdUaG52UzNXR3VxUT09
 
