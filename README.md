@@ -21,7 +21,7 @@ ____________________
 
 ## Next meetings
 
-- **Thursday 06/04/2023 at 11:00** am [MCP 117-118] : Back from Geopython 2023. **Jean Baptiste Barré**
+- Did you try something that you found very useful for your research? Please, share it with others and remember that you don't need to be an expert to present it.
 
 Permanent Zoom link : https://univ-grenoble-alpes-fr.zoom.us/j/92094274796?pwd=UW1mVldveHJ0aTdUaG52UzNXR3VxUT09
 
@@ -35,12 +35,13 @@ Permanent Zoom link : https://univ-grenoble-alpes-fr.zoom.us/j/92094274796?pwd=U
 - visit / FlowVR ([Basile HECTOR](http://pp.ige-grenoble.fr/annuaire/annuaire-osug-ige/hectorb.htm))
 
 ## Past meetings
+- Wenesday 12/04/2023 at 11:00 pm: Back from Geopython 2023. an overview of python libraries for Geospatial data.([Jean-baptiste Barré](https://jbbarre.github.io/))
 - Thursday 4/11 at 10:00 am : Machine learning #3: Physical constraints to machine learning methods [Jordi Bolibar](https://jordibolibar.wordpress.com/) (Material : [Paper](https://arxiv.org/pdf/2001.04385v1.pdf), [Video](https://www.youtube.com/watch?v=SU-OILSmR1M), [Book](https://physicsbaseddeeplearning.org/intro.html))
 - Tuesday 22/06 at 10:30 am: Machine learning #2: Presentation of a ML probleme from scratch ([Clara Burgard](https://claraburgard.weebly.com/))
 - Tuesday 25/05 at 10:30 am: Science outreach and documentation on the cloud - A brief overview of the tools behind OGGM-Edu: holoviz, sphinx, readthedocs, mybinder, repo2docker, jupyterhub ([Fabien Maussion](https://fabienmaussion.info/)) ([slides](https://github.com/mickaellalande/MC-Toolkit/blob/master/slides/OGGM-Edu%20tools.pdf))
 - Tuesday 11/05 at 10:30 am: [Machine learning](Machine-Learning) #1: Creation of a new discussion group within MCToolkit, first meeting (Thomas Chauve)
 - Tuesday 23/02 at 10:30 am: [The misuse of colour in science communication
-](ColourUse) ([Jean-baptiste Barré](http://pp.ige-grenoble.fr/pageperso/barrej/))
+](ColourUse) ([Jean-baptiste Barré](https://jbbarre.github.io/))
 - Tuesday 09/02 at 10:30 am: [How to make a Python package?](Python_Package) ([Clara BURGARD](https://claraburgard.weebly.com/))
 - Tuesday 26/01 at 10:30 am: [intake - taking the pain out of data access (CMIP6)](intake) ([Mickaël Lalande](https://mickaellalande.github.io/))
 - Tuesday 15/12 at 11:00 am: [GUI for dummies with PySimpleGUI](PySimpleGUI) ([Juan-Pedro ROLDAN-BLASCO](http://pp.ige-grenoble.fr/pageperso/roldanbj/))
