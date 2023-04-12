@@ -35,7 +35,7 @@ Permanent Zoom link : https://univ-grenoble-alpes-fr.zoom.us/j/92094274796?pwd=U
 - visit / FlowVR ([Basile HECTOR](http://pp.ige-grenoble.fr/annuaire/annuaire-osug-ige/hectorb.htm))
 
 ## Past meetings
-- Wenesday 12/04/2023 at 11:00 pm: Back from Geopython 2023. an overview of python libraries for Geospatial data.([Jean-baptiste Barré](https://jbbarre.github.io/))
+- Wenesday 12/04/2023 at 11:00 pm: Back from Geopython 2023. an overview of python libraries for Geospatial data.([Jean-baptiste Barré](https://jbbarre.github.io/))([slides](https://github.com/IGE-numerique/IGE-Toolkit/GeoPython2023/Back from Geopython 2023.pdf))
 - Thursday 4/11 at 10:00 am : Machine learning #3: Physical constraints to machine learning methods [Jordi Bolibar](https://jordibolibar.wordpress.com/) (Material : [Paper](https://arxiv.org/pdf/2001.04385v1.pdf), [Video](https://www.youtube.com/watch?v=SU-OILSmR1M), [Book](https://physicsbaseddeeplearning.org/intro.html))
 - Tuesday 22/06 at 10:30 am: Machine learning #2: Presentation of a ML probleme from scratch ([Clara Burgard](https://claraburgard.weebly.com/))
 - Tuesday 25/05 at 10:30 am: Science outreach and documentation on the cloud - A brief overview of the tools behind OGGM-Edu: holoviz, sphinx, readthedocs, mybinder, repo2docker, jupyterhub ([Fabien Maussion](https://fabienmaussion.info/)) ([slides](https://github.com/mickaellalande/MC-Toolkit/blob/master/slides/OGGM-Edu%20tools.pdf))
