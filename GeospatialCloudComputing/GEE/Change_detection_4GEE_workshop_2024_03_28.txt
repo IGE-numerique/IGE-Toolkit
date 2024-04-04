@@ -1,0 +1,143 @@
+// date we're interested in
+var Start_visualizeDate = ee.Date('2017-10-17');
+print(Start_visualizeDate);
+
+// load shapefile of glaciers
+var geometry = Hispar.geometry();//Hispar is the name of the shapefile imported using assets (left pannel)
+var projection = 'EPSG:32643';
+
+// Min/Max dB values to consider  
+var RGBmin = -25 ; //dB
+var RGBmax =  -6 ; //dB
+
+//Min, max obrit number to consider
+var min_orbit = 26
+var max_orbit = 35
+
+// visualize polygon & zoom to layer
+Map.centerObject(Hispar);
+
+// visualize polygons
+Map.addLayer(Hispar,{},'polygons')
+
+// -------------FUNCTIONS------------ //
+
+// mosaic images from the same date -> to avoid missing data when combinding acquisitions from different dates which have different footprints.
+// This function must hand over all required scene properties (relativeOrbit, system:time_start, etc.)
+// ----------------------------
+function mosaicByDate(imcol){
+  // imcol:   An image collection
+  // returns: An image collection
+  var imlist = imcol.toList(imcol.size());
+
+  // extract dates from image list by mapping the "extraction function" on the list
+  var unique_dates = imlist.map(function(im){
+    return ee.Image(im).date().format("YYYY-MM-dd");
+  }).distinct(); // remove duplicate dates
+
+  // Map the mosaicing function on each the list of unique dates.
+  var mosaic_imlist = unique_dates.map(function(d){
+    d = ee.Date(d);
+    var im = imcol.filterDate(d, d.advance(1, "day")).mosaic(); // for each date, create a mosaic
+
+    var im_source = imcol.filterDate(d, d.advance(1, "day")).first();
+    im = im.set("system:time_start", d.millis(), "system:id", d.format("YYYY-MM-dd"));
+    im = im.set("relativeOrbitNumber_start", im_source.get("relativeOrbitNumber_start"));
+    // Keep coordinate system of the source images
+    im = im.select(['VV','VH']).reproject(im_source.select(['VV']).projection());
+    return im;
+  });
+
+  return ee.ImageCollection(mosaic_imlist);
+}
+// end function ---------------------------
+
+// Create a function to convert each element of the system:start_time list into a Date format.
+var milli2date = function(millis){
+  return ee.Date(millis).format('YYYY-MM-dd HH:mm');
+}; 
+
+// Define time range to search for images
+var enddate = Start_visualizeDate.advance(0.5, 'month');
+var pastdate = Start_visualizeDate.advance(-0.1, 'month');
+
+// Filter orbit numbers
+var filter_orbitnumber = ee.Filter.and(ee.Filter.gt('relativeOrbitNumber_start',min_orbit ), 
+                          ee.Filter.lt('relativeOrbitNumber_start', max_orbit));
+
+// Load the Sentinel-1 ImageCollection which intersects with the defined polygon.
+var vvvh = ee.ImageCollection('COPERNICUS/S1_GRD')
+  .filterBounds(Hispar)
+  .filterDate(pastdate, enddate)
+  .sort('system:time_start', true)
+  .filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+  .filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+  // Filter to get images collected in interferometric wide swath mode.
+  .filter(ee.Filter.eq('instrumentMode', 'IW'))
+  .filter(filter_orbitnumber);
+  
+// Print content of image collection in a user-friendly way: (There might be multiple adjacent acquisitions from the same orbit). They need to be moasaiced first.
+var vvvh_sorted = vvvh.sort('system:time_start', false);
+
+// extract Orbit from all found images:
+var orb1 = vvvh_sorted.aggregate_array('relativeOrbitNumber_start'); 
+print(orb1)
+
+// Extract date as string array from the system:time_start property
+var orb2 = vvvh_sorted.aggregate_array('system:time_start').map(milli2date);
+print(orb2)
+
+// Split selected images into ascending and descending orbits 
+var vvvhAsc = vvvh.filter(ee.Filter.eq('orbitProperties_pass', 'ASCENDING'));
+var vvvhDes = vvvh.filter(ee.Filter.eq('orbitProperties_pass', 'DESCENDING'));
+
+// for simplicity we only keep the ascending orbit
+
+// Select a few images after the defined visualizeDate 
+var ascFut = vvvhAsc.filterDate(Start_visualizeDate, enddate);
+
+// Mosaic by date
+ascFut = mosaicByDate(ascFut);
+
+// get the first acquired image.
+var ascSel1 = ascFut.first();
+
+
+// Select past images with the same orbit as the selected first image
+// there might be multiple images for the same date. They need to be mosaiced.
+var ascPast = vvvhAsc.filterDate(pastdate, Start_visualizeDate);//.filter(ee.Filter.eq('relativeOrbitNumber_start', ascSel1.get('relativeOrbitNumber_start')));
+print(ascPast.aggregate_array('system:time_start').map(milli2date))
+// Mosaic by date (when there are several images at the same date)
+ascPast = mosaicByDate(ascPast);
+
+// Select previous image (with same orbit) which is at least 1 day before the first image (6 day repeat pass)
+var ascSel2 = ascPast.filterDate(pastdate, ascSel1.date().advance(-7, 'day')).sort('system:time_start', false).first();
+print(ascSel2.date());
+
+// Separate VV & VH polarizations
+var ASC_VH1 = ascSel1.select('VH');
+var ASC_VV1 = ascSel1.select('VV');
+var ASC_VH2 = ascSel2.select('VH');
+var ASC_VV2 = ascSel2.select('VV');
+
+// average polarizations
+var ASC1 = ASC_VH1.add(ASC_VV1).divide(2);
+var ASC2 = ASC_VH2.add(ASC_VV2).divide(2);
+
+// clip to bounds
+ASC1 = ASC1.where(ASC1.lt(RGBmin), RGBmin);
+ASC2 = ASC2.where(ASC2.gt(RGBmax), RGBmax);
+
+// Clamp bands in the range [0,1]
+var diff = RGBmax-RGBmin;
+ASC2 = ASC2.subtract(RGBmin).divide(diff);
+ASC1 = ASC1.subtract(RGBmin).divide(diff);
+
+// creat RGB composite
+var ASCcomposite_clamp = ee.Image.cat([ASC2, ASC1, ASC2]);
+
+// Clip the image to the polygon
+ASCcomposite_clamp = ASCcomposite_clamp.clip(Hispar)
+  
+// visualize results
+Map.addLayer(ASCcomposite_clamp, {}, 'RGB ASC');

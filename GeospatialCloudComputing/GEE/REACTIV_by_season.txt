@@ -1,0 +1,317 @@
+// Reactiv Code modified by seasons.
+//This code has been written by E. Colin, L. Charrier and 4 students from CentraleSupelec
+// When using this code in a publication, please cite:
+// 
+// "Mountain glaciers analyzed by remote sensing", 
+// https://elisecolin.medium.com/mountain-glaciers-analyzed-by-remote-sensing-5812c65534b8
+//
+// -------------------------------------------------------------
+// In this version, the method is applied by selecting a common season for 2017, 2018, 2019 and 2020
+// The chosen orbit is the most frequent one over the Center of the Map
+// Parameters: DATES, ASCENDING OR DESCENDING 
+// Winter's period 
+// Example Kyagar: 77.2, 35.6 at zoom 8
+
+var debut_saison='11-16';
+var fin_saison='03-01';
+
+var saison1_debut=ee.String('2017-').cat(debut_saison);
+var saison1_fin=ee.String('2018-').cat(fin_saison);
+var saison2_debut=ee.String('2018-').cat(debut_saison);
+var saison2_fin=ee.String('2019-').cat(fin_saison);
+var saison3_debut=ee.String('2019-').cat(debut_saison);
+var saison3_fin=ee.String('2020-').cat(fin_saison);
+var saison4_debut=ee.String('2020-').cat(debut_saison);
+var saison4_fin=ee.String('2021-').cat(fin_saison);
+
+var str='DESCENDING'; //orbit ASCENDING OR DESCENDING
+
+// date selection
+var ds = ee.Number(365).multiply(4);
+
+
+// date selection
+var hiver2020fin = ee.Date(saison4_fin);
+var hiver2020debut = ee.Date(saison4_debut);
+
+var hiver2019fin = ee.Date(saison3_fin);
+var hiver2019debut = ee.Date(saison3_debut);
+
+var hiver2018fin = ee.Date(saison2_fin);
+var hiver2018debut = ee.Date(saison2_debut);
+
+var hiver2017fin = ee.Date(saison1_fin);
+var hiver2017debut = ee.Date(saison1_debut);
+
+// Comparaisons polar
+var polarvv='VV';
+var polarvh='VH';
+
+// Centering
+var pos = Map.getCenter();
+print('Coordinate of the Center of the Map',pos);
+
+// Load the Sentinel-1 ImageCollection centered on the location "pos"
+// Necessity to have the stack centered on this location in order to find next the orbit numbers
+var sentinel1_liste_17 = ee.ImageCollection('COPERNICUS/S1_GRD_FLOAT')
+.filterDate(hiver2017debut, hiver2017fin)
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+.filter(ee.Filter.eq('instrumentMode', 'IW'))
+.filterBounds(pos)
+.filter(ee.Filter.eq('orbitProperties_pass', str));
+// Same for 2018
+var sentinel1_liste_18 = ee.ImageCollection('COPERNICUS/S1_GRD_FLOAT')
+.filterDate(hiver2018debut, hiver2018fin)
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+.filter(ee.Filter.eq('instrumentMode', 'IW'))
+.filterBounds(pos)
+.filter(ee.Filter.eq('orbitProperties_pass', str));
+// Same for 2019
+var sentinel1_liste_19 = ee.ImageCollection('COPERNICUS/S1_GRD_FLOAT')
+.filterDate(hiver2019debut, hiver2019fin)
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+.filter(ee.Filter.eq('instrumentMode', 'IW'))
+.filterBounds(pos)
+.filter(ee.Filter.eq('orbitProperties_pass', str));
+// Same for 2020
+var sentinel1_liste_20 = ee.ImageCollection('COPERNICUS/S1_GRD_FLOAT')
+.filterDate(hiver2020debut, hiver2020fin)
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+.filter(ee.Filter.eq('instrumentMode', 'IW'))
+.filterBounds(pos)
+.filter(ee.Filter.eq('orbitProperties_pass', str));
+
+
+// Fusion of all collections along years
+var sentinel1_total =
+sentinel1_liste_18.merge(sentinel1_liste_19).merge(sentinel1_liste_17).merge(sentinel1_liste_20);
+var NbOrbit = sentinel1_total.aggregate_count_distinct('relativeOrbitNumber_start'); //print('Number of Orbits',NbOrbit);
+var ListOrbits = sentinel1_total.aggregate_array('relativeOrbitNumber_start'); // find orbit numbers and their frequency
+var freq = ee.Dictionary(ee.List(ListOrbits).reduce(ee.Reducer.frequencyHistogram())); // print('freq',freq);
+var array = ee.Array([freq.keys().map(ee.Number.parse), freq.values()]);
+
+// orbit choice : first, the one with the max frequency
+var frequences = array.slice(0,-1);
+var arraysort = array.sort(frequences);
+var index = ee.Number(NbOrbit).add(-1);
+var orbite = arraysort.get([0,ee.Number(index)]);
+print('Selected orbit=',orbite); // find images with the choice orbit
+var sentinel1 = sentinel1_total.filterMetadata('relativeOrbitNumber_start', 'equals', orbite);
+
+// This function applies to each image the linear scale
+var amplitude = function(image) {
+var imlin = image.expression(
+'sqrt(intensity)', {
+'intensity': image
+});
+return imlin; // conversion in linear, then compute mean: classical mean
+};
+
+//Compute the coefficient of variation
+var stdLinear = sentinel1.select(polarvh).map(amplitude).reduce(ee.Reducer.stdDev());
+var meanLinear = sentinel1.select(polarvh).map(amplitude).reduce(ee.Reducer.mean());
+var magicvh=stdLinear.divide(meanLinear);
+
+var stdLinear = sentinel1.select(polarvv).map(amplitude).reduce(ee.Reducer.stdDev());
+var meanLinear = sentinel1.select(polarvv).map(amplitude).reduce(ee.Reducer.mean());
+var magicvv=stdLinear.divide(meanLinear);
+
+var imaxvh = sentinel1.select(polarvh).max();
+var imaxvv = sentinel1.select(polarvv).max();
+var magic=magicvv.max(magicvh);
+var imax=imaxvv.max(imaxvh);
+
+
+//Get the dates 
+var days2017_2018 = hiver2018debut.difference(hiver2017fin, 'day'); //difference between the end of winter 2017 and the beggening of winter 2018
+var days2018_2019 = hiver2019debut.difference(hiver2018fin, 'day');
+var days2019_2020 = hiver2020debut.difference(hiver2019fin, 'day');
+var days2017 = hiver2017fin.difference(hiver2017debut, 'day');  // number of days in winter 2017
+var days2018 = hiver2018fin.difference(hiver2018debut, 'day');  // number of days in winter 2018
+var days2019 = hiver2019fin.difference(hiver2019debut, 'day');  // number of days in winter 2019
+var days2020 = hiver2020fin.difference(hiver2020debut, 'day');  // number of days in winter 2020                                 
+
+var d01=days2017.divide(ds);
+
+var d11=(days2017_2018.add(days2017)).divide(ds);
+var d12=(days2017_2018.add(days2017).add(days2018)).divide(ds);
+
+var d21=(days2017_2018.add(days2018_2019).add(days2017).add(days2018)).divide(ds);
+var d22=(days2017_2018.add(days2018_2019).add(days2017).add(days2018).add(days2019)).divide(ds);
+
+var d31=(days2017_2018.add(days2018_2019).add(days2019_2020).add(days2017).add(days2018)).divide(ds);
+var d32=(days2017_2018.add(days2018_2019).add(days2019_2020).add(days2017).add(days2018).add(days2019).add(days2020)).divide(ds);
+
+print('Fractions', 0,d01,d11,d12,d21,d22,d31,d32);
+
+// Conversion in HSV
+
+// Computation of the Hexadecimal Code for color steps -----------------------------------------------------------------
+var f1 = ee.Image([0, 1, 1]).hsvToRgb();
+var stats = f1.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa1=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')))
+
+var f2 = ee.Image([d01, 1, 1]).hsvToRgb();
+var stats = f2.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa2=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')))
+
+var f3 = ee.Image([d11, 1, 1]).hsvToRgb();
+var stats = f3.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa3=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')));
+
+var f4 = ee.Image([d12, 1, 1]).hsvToRgb();
+var stats = f4.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa4=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')));
+
+var f5 = ee.Image([d21, 1, 1]).hsvToRgb();
+var stats = f5.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa5=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')));
+
+var f6 = ee.Image([d22, 1, 1]).hsvToRgb();
+var stats = f6.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa6=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')));
+
+var f7 = ee.Image([d31, 1, 1]).hsvToRgb();
+var stats = f7.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa7=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')));
+
+var f8 = ee.Image([d32, 1, 1]).hsvToRgb();
+var stats = f8.reduceRegion({reducer: ee.Reducer.mean(),  geometry: pos, scale:30 });
+var red=stats.getNumber('red'); var green=stats.getNumber('green'); var blue=stats.getNumber('blue');
+var codehexa8=(ee.Number(red).multiply(255).floor().format('%02X').cat(ee.Number(green).multiply(255).floor().format('%02X')).cat(ee.Number(blue).multiply(255).floor().format('%02X')));
+// ------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+
+
+// This function affects value of days for pixels where maximum is reached for VH
+
+
+var timevh = function(image) {
+  var days = image.date().difference(saison1_debut, 'day').divide(ds); //divide by the period of time observed
+  return image.where(image.lt(imaxvh),0).where(image.gte(imaxvh),days);
+};
+var daysvh=sentinel1.select(polarvh).map(timevh).sum();
+
+
+var timevv = function(image) {
+  var days = image.date().difference(saison1_debut, 'day').divide(ds); //divide by the period of time observed
+  return image.where(image.lt(imaxvv),0).where(image.gte(imaxvv),days);
+};
+var daysvv=sentinel1.select(polarvv).map(timevv).sum();
+
+
+
+var days=(daysvv.where(magicvv.lte(magicvh),daysvh));   // The date is the one selected in the polarimetric channel where the Coefficient of Variation is maximum
+
+
+var unit = function(image) {    // Function for the temporal dimension of the stack
+  var imunit = image.multiply(0).add(1);
+  return imunit; // conversion in linear, then compute mean: classical mean
+};
+var sizepile=sentinel1.select(polarvh).map(unit).sum();  
+
+// Parameter for dynamics
+var mu=0.2286; // Theoretical mean for Rayleigh Nakagam L=4.9
+var stdmu=ee.Image(0.1616);
+var stdmu=stdmu.divide(sizepile.sqrt()); // Theoretical std for Rayleigh Nakagami L=4.9
+var magicnorm=magic.subtract(mu).divide(stdmu.multiply(10)).clamp(0,1);
+
+
+var rgb=ee.Image.cat(days,magicnorm.pow(1),imax.pow(0.5).clamp(0,1)).hsvToRgb();
+var visparams = {min: [0, 0, 0], max: [1, 1, 1], gamma: 1.0};
+Map.addLayer(rgb, visparams,'REACTIV Visualization');
+
+
+
+
+// ---------------- DATE LISTS ----------------------------------------
+// Get the date range of images in the collection.
+var range =sentinel1.select(polarvh).reduceColumns(ee.Reducer.minMax(), ["system:time_start"])
+print('Date range: ', ee.Date(range.get('min')), ee.Date(range.get('max')))
+var okMap2 = sentinel1.select(polarvh).map(function(image) {
+return image.set('date', image.date().format('YY MM dd'));
+});
+// Get a list of the dates.
+var datesCount = okMap2.aggregate_count_distinct('date');
+print('Number of dates', datesCount);
+var datesList = okMap2.aggregate_array('date');
+print('Date List', datesList);
+// find unique dates and their frequency
+var freq = ee.Dictionary(ee.List(datesList).reduce(ee.Reducer.frequencyHistogram()));
+print('freq',freq);
+
+var pal1=[ee.String(codehexa1),ee.String(codehexa2)];
+var pal2=[ee.String(codehexa3),ee.String(codehexa4)];
+var pal3=[ee.String(codehexa5),ee.String(codehexa6)];
+var pal4=[ee.String(codehexa7),ee.String(codehexa8)];
+
+var vis1 = {min:0, max:1, palette:pal1};
+var vis2 = {min:0, max:1, palette:pal2};
+var vis3 = {min:0, max:1, palette:pal3};
+var vis4 = {min:0, max:1, palette:pal4};
+
+
+function makeLegend(vis,d1) {
+  var lon = ee.Image.pixelLonLat().select('longitude');
+  var gradient = lon.multiply((vis.max-vis.min)/(100.0)).add(vis.min);
+  var legendImage = gradient.visualize(vis);
+  var thumb = ui.Thumbnail({
+    image: legendImage,
+    params: {bbox:'0,0,300,4', dimensions:'75x20'},
+    style: {padding: '1px', position: 'bottom-center',backgroundColor:'black'}
+    });
+  var panel = ui.Panel({
+  widgets: [
+  ui.Label(d1),
+  ui.Label(str),
+  ui.Label('VH/VV'),
+  ],
+  layout: ui.Panel.Layout.flow('horizontal'),
+  style: {stretch: 'horizontal',backgroundColor:'black',color:'blue'}
+  });
+  return ui.Panel({style: {backgroundColor: 'black'}}).add(panel).add(thumb);
+}
+
+
+Map.add(makeLegend(vis1,'2017-2018'));
+Map.add(makeLegend(vis2,'2018-2019'));
+Map.add(makeLegend(vis3,'2019-2020'));
+Map.add(makeLegend(vis4,'2021-2022'));
+
+
+
+// Create a panel to hold the chart.
+var panel = ui.Panel();
+panel.style().set({
+width: '400px',
+position: 'bottom-right'
+});
+Map.add(panel);
+
+// Register a function to draw a chart when a user clicks on the map.
+Map.onClick(function(coords) {
+panel.clear();
+var point = ee.Geometry.Point(coords.lon, coords.lat);
+// panel.add(date);
+var chart2=ui.Chart.image.series(sentinel1.select('VV','VH'), point, null, 30)
+  .setChartType('ScatterChart')
+  .setOptions({
+  title: 'temporal profile',
+  hAxis: {title: 'Acquisition Date'},
+  vAxis: {title: 'Intensity Values (linear)'},
+});
+panel.add(chart2);
+});

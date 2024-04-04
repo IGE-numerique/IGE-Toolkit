@@ -1,0 +1,24 @@
+name: earthgif
+channels:
+  - default  
+  - conda-forge
+dependencies:
+    - python=3.9
+    - pip=22
+    - geopandas
+    - stackstac
+    - dask
+    - distributed
+    - dask-image
+    - planetary-computer
+    - folium
+    - branca
+    - shapely
+    - ipykernel
+    - bottleneck
+    - opencv
+    - scikit-image
+    - pip:
+      - pystac_client
+      - geogif
+    

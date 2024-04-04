@@ -1,0 +1,60 @@
+//Display the median of a stack of S1 GRD images and download as batch process all the images between the two given dates
+//Written by L. Charrier
+
+var polygons = ee.FeatureCollection(geometry);
+
+var start_date = ee.Date('2019-05-01');
+var finish_date = ee.Date('2019-06-15');
+var orbit = 'ASCENDING';
+var polar = 'VV'
+var instrument_mode = 'IW'
+// Name of the folder where to save the files
+var folder = 'GEE_EXPORT';
+
+// Get the VV collection.
+var collectionS1 = ee.ImageCollection('COPERNICUS/S1_GRD')
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', polar))
+.filter(ee.Filter.eq('instrumentMode', instrument_mode))
+// .filter(ee.Filter.eq('orbitProperties_pass', orbit))
+.filterDate(start_date, finish_date)
+.filterBounds(polygons);
+
+// Get the VV collection.
+var collectionVV = collectionS1.select(polar);
+
+// Get the VH collection.
+// var collectionVH = collectionS1.select('VH');
+
+// // Get the angle collection.
+// var collectionAngle = collectionS1.select('angle');
+
+var VV = ee.Image(collectionVV.median());
+
+Map.centerObject(polygons, 7);
+Map.addLayer(VV, {min: -25, max: 5}, polar, true);
+Map.addLayer(polygons, {color: 'FF0000'}, 'colored');
+
+// Import Tools
+var batch = require('users/fitoprincipe/geetools:batch');
+
+// Download Collections
+batch.Download.ImageCollection.toDrive(collectionVV, folder,
+{name: polar +'*'+orbit+'*'+'{id}',
+scale: 25,
+maxPixels: 1e13,
+region: polygons,
+type: 'float'});
+
+// batch.Download.ImageCollection.toDrive(collectionVH, folder,
+//                 {name: 'VH\_'+orbit+'\_'+'{id}',
+//                   scale: 10,
+//                   maxPixels: 1e13,
+//                 region: polygons,
+//                 type: 'float'});
+
+// batch.Download.ImageCollection.toDrive(collectionAngle, folder,
+//                 {name: 'angle\_'+orbit+'\_'+'{id}',
+//                   scale: 10,
+//                   maxPixels: 1e13,
+//                 region: polygons,
+//                 type: 'float'});

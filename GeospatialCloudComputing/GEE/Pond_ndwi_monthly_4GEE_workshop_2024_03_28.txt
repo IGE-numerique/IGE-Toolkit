@@ -1,0 +1,149 @@
+// Sentinel-2 bands
+var bands = ['B2','B3','B4','B5','B6','B7','B8','B8A','B11','B12']; //10 bands
+
+// define period over which to mosaic the Sentinel-2 scenes: goes from m1/y1 to m2/y2
+var m1=5;//first month
+var m2=6;//second month
+var y1=2019;//first year
+var y2=2019;//second year
+
+// load glacier shapefiles from imports (give appropriate CRS)
+var polygon = Langtang_g;//name of the shapefile imported using asset
+var GL_name = 'Langtang';
+var Proj = 'EPSG:32645';
+
+var folder_name = 'test' //to change to save in your drive
+
+// --------------- FUNCTIONS ----------------
+
+// Join two collections on their 'system:index' property. // The propertyName parameter is the name of the property // that references the joined image.
+function indexJoin(collectionA, collectionB, propertyName) {
+  var joined = ee.ImageCollection(ee.Join.saveFirst(propertyName).apply({
+    primary: collectionA,
+    secondary: collectionB,
+    condition: ee.Filter.equals({
+      leftField: 'system:index',
+      rightField: 'system:index'})
+  }));
+  // Merge the bands of the joined image.
+  return joined.map(function(image) {
+    return image.addBands(ee.Image(image.get(propertyName)));
+  });
+}
+
+// Aggressively mask clouds and shadows.
+function maskImage(image) {
+  // Compute the cloud displacement index from the L1C bands.
+  var cdi = ee.Algorithms.Sentinel2.CDI(image);
+  var s2c = image.select('probability');
+  var cirrus = image.select('B10').multiply(0.0001);
+
+  // Assume low-to-mid atmospheric clouds to be pixels where probability is greater than 65%, and CDI is less than -0.5. For higher atmosphere cirrus clouds, assume the cirrus band is greater than 0.01.
+  // The final cloud mask is one or both of these conditions.
+  var isCloud = s2c.gt(50).and(cdi.lt(-0.5)).or(cirrus.gt(0.01)); //slightly more aggressive filter, 50% probability
+
+  // Reproject is required to perform spatial operations at 20m scale.
+  // 20m scale is for speed, and assumes clouds don't require 10m precision.
+  isCloud = isCloud.focal_min(3).focal_max(16);
+  isCloud = isCloud.reproject({crs: cdi.projection(), scale: 20});
+
+  return image.select(bands).updateMask(isCloud.not());
+}
+
+//add NDWI for S2
+function addNDWI(image){
+  return image.addBands(image.normalizedDifference(['B3', 'B8']).rename('ndwi'));
+}
+
+// clip to polygon extents
+function clp(img) {
+  return img.clip(polygon)
+}
+
+
+// ----------------------- ANALYSIS -------------------------
+
+// Select image collection to draw images from
+// Here S2 L1C for cirrus band. Band B10 from this dataset are needed as input to the cloud mask function.
+var s2 = ee.ImageCollection('COPERNICUS/S2');
+
+// Filter collection to get images corresponding to right time interval and the right geographical extents
+s2 = s2.filterBounds(polygon).filter(ee.Filter.calendarRange(y1,y2,'year')).filter(ee.Filter.calendarRange(m1,m2,'month')).select(['B10']);//may only need B10
+
+// Select second image collection to draw images from
+// S2Cloudless for the cloud probability band. The probability band is used in the cloud mask function.
+var s2c = ee.ImageCollection('COPERNICUS/S2_CLOUD_PROBABILITY');
+s2c = s2c.filter(ee.Filter.calendarRange(y1,y2,'year')).filter(ee.Filter.calendarRange(m1,m2,'month')).filterBounds(polygon);
+
+// select third image collection to draw images from
+// Sentinel-2 surface reflectance data for the composite.
+var s2Sr = ee.ImageCollection('COPERNICUS/S2_SR'); //_SR for surface reflectance data
+s2Sr = s2Sr.filter(ee.Filter.calendarRange(y1,y2,'year')).filter(ee.Filter.calendarRange(m1,m2,'month')).filterBounds(polygon).select(bands);
+
+// JOIN S2 datasets together............................
+// Join the cloud probability dataset to surface reflectance.
+var withCloudProbability = indexJoin(s2Sr, s2c, 'cloud_probability');
+// Join the L1C data to get the bands needed for CDI.
+var withS2L1C = indexJoin(withCloudProbability, s2, 'l1c');
+
+// Map the cloud masking function over the joined collection.
+var collection = ee.ImageCollection(withS2L1C.map(maskImage));
+print(collection.first()) //show content of first elementsc (for troubleshooting)
+print(collection) //gives N elements
+
+// For visualisation only select RGB bands & calculate median
+var rgb_bands = collection.select(['B4', 'B3', 'B2']);
+var median_rgb = rgb_bands.median();
+
+// Calculate NDWIfor all selected S2 images
+var ndwi = collection.map(addNDWI);
+
+// Clip to wanted extents
+var ndwi_clip = ndwi.map(clp);
+
+// calculate median ndwi
+var reduced_median = ndwi_clip.reduce(ee.Reducer.median());//.median()
+
+// count number of pixels for the period
+var count=ndwi_clip.select('ndwi').count();
+
+// define ponds/lakes as pixels with NDWI > 0.1 (Kneib et al., 2020) but other values can also be tested
+var ponds=reduced_median.select('ndwi_median').gt(0.1).and(count.gt(2));
+
+// export ndwi median & count
+var outname_m = GL_name+'_median_' + y1 + '_' + m1 + '_' + m2;
+var outname_c = GL_name+'_count_' + y1 + '_' + m1 + '_' + m2;
+
+
+Export.image.toDrive({
+ image: reduced_median.select('ndwi_median'),
+ description: outname_m,
+ scale: 10,
+ region: polygon,
+ folder : folder_name,
+ crs: Proj,
+ maxPixels: 3000000000,
+});
+
+Export.image.toDrive({
+ image: count,
+ description: outname_c,
+ scale: 10,
+ region: polygon,
+ folder : folder_name,
+ crs: Proj,
+ maxPixels: 3000000000,
+});
+
+
+//DISPLAY RESULTS
+
+// Center display on survey domain
+Map.centerObject(polygon);
+
+// Load AOI on map
+Map.addLayer(polygon, {}, 'domain');
+Map.addLayer(reduced_median.select('ndwi_median'),{scale:10,min: 0, max:1}, 'median ndwi');
+Map.addLayer(count,{scale:10,min: 0, max:10}, 'count');
+Map.addLayer(ponds,{}, 'ponds');
+Map.addLayer(median_rgb, {bands: ['B4', 'B3', 'B2'], min: 0, max: 3000}, 'Median RGB');
